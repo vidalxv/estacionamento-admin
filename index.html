@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estacionamento</title>
+    <link rel="stylesheet" href="./src/css/style.css">
+</head>
+
+<body>
+    <main>
+        <h1 style="text-align: center;">AREA 1</h1>
+        <section class="vagas">
+            <div class="vaga-a">
+                <button class="vaga">
+                    <img src="./src/assets/carro.png" alt="" width="120px">
+                </button>
+                <button class="vaga">
+                    <span>2</span>
+                </button>
+                <button class="vaga">
+                    <img src="./src/assets/carro.png" alt="" width="120px">
+                </button>
+            </div>
+            <div class="vaga-b">
+                <button class="vaga">
+                    <span>4</span>
+                </button>
+                <button class="vaga">
+                    <img src="./src/assets/carro.png" alt="" width="120px">
+                </button>
+                <button class="vaga">
+                    <span>6</span>
+                </button>
+            </div>
+        </section>
+        <section class="categorias">
+            <button class="areas">
+                <p>Area 1</p>
+            </button>
+            <button class="areas">
+                <p>Area 2</p>
+            </button>
+            <button class="areas">
+                <p>Area 3</p>
+            </button>
+        </section>
+        <button class="opcoes">Mais Opções</button>
+    </main>
+    <aside id="info-card">
+        <div class="card">
+            <div class="card">
+                <form action="">
+                    <label for="placa">PLACA:</label>
+                    <input type="text" name="placa" id="placa">
+                    <label for="modelo">MODELO:</label>
+                    <input type="text" name="modelo" id="modelo">
+                    <label for="cor">COR</label>
+                    <input type="text" name="cor" id="cor">
+                    <label for="ano">ANO:</label>
+                    <input type="text" name="ano" id="ano">
+                    <button class="add">Adicionar</button>
+                    <button class="delete">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </aside>
+    <script src="./src/js/script.js"></script>
+</body>
+</html>

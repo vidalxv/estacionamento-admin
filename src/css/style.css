@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body {
+    color: white;
+    background-color: rgb(17, 17, 17);
+    display: flex;
+    justify-content: space-evenly;
+}
+
+main {
+    margin-top: 80px;
+    text-align: center;
+}
+.vagas {
+    display: flex;
+    justify-content: space-around;
+    gap: 60px;
+}
+
+.vaga-a, .vaga-b {
+    width: 150px;
+    height: 200px;
+}
+
+.vaga-a .vaga {
+    border-right: 0px;
+}
+
+.vaga-b .vaga {
+    border-left: 0px;
+}
+label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+input {
+    outline: none;
+    border-radius: 10px;
+    border: 0;
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+}
+
+.vaga {
+    background-color: rgb(71, 36, 115);
+    border: 1px solid white;
+    width: 100%;
+    height: 33%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    box-shadow: -1px 1px 30px rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+}
+
+.categorias {
+    margin-top: 100px;
+    gap: 20px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+img {
+    transform:  rotate(90deg);
+}
+
+.areas {
+    color: black;
+    margin: 20px;
+    background-color: rgb(255, 255, 255);
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    border-radius: 20px;
+    border: 0;
+    transition: 0.2s all ease;
+    cursor: pointer;
+}
+
+.areas:hover {
+    box-shadow: -1px 1px 10px rgba(104, 103, 106, 0.691);
+}
+
+aside {
+    margin-top: 100px;
+    background-color: rgb(36, 36, 36);
+    border-radius: 30px;
+    width: 250px;
+    height: 350px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: -1px 1px 50px rgba(255, 255, 255, 0.067);
+}
+
+.card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+}
+
+.add {
+    background-color: purple;
+    border: 1px solid rgb(137, 92, 151);
+    color: white;
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete {
+    margin-top: 10px;
+    background-color: rgb(54, 6, 0);
+    border: 1px solid rgb(255, 9, 9);
+    color: rgb(163, 21, 21);
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.opcoes {
+    background-color: rgb(53, 27, 53);
+    border: 1px solid rgb(194, 126, 214);
+    color: white;
+    width: 60%;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#info-card {
+    display: none;
+}
+
+#info-card.visible {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
