@@ -9,63 +9,126 @@
 </head>
 
 <body>
-    <main>
-        <h1 style="text-align: center;">AREA 1</h1>
+    <div id="sidebar" class="sidebar">
+        <button class="closebtn" onclick="toggleSidebar()">×</button>
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+        <a href="#">Link 4</a>
+    </div>
+    <div class="buttontlg">
+        <button class="openbtn" onclick="toggleSidebar()">☰ Abrir Sidebar</button>
+    </div>
+    <main id="main">
+        <h1 style="text-align: center;">ÁREA 1</h1>
         <section class="vagas">
             <div class="vaga-a">
                 <button class="vaga">
-                    <img src="./src/assets/carro.png" alt="" width="120px">
+                    <img src="./src/assets/carro_amarelo.png" alt="" width="60px">
                 </button>
                 <button class="vaga">
-                    <span>2</span>
+                    <span>A2</span>
                 </button>
                 <button class="vaga">
-                    <img src="./src/assets/carro.png" alt="" width="120px">
+                    <img src="./src/assets/carro_azul.png" alt="" width="60px">
                 </button>
             </div>
             <div class="vaga-b">
                 <button class="vaga">
-                    <span>4</span>
+                    <span>A4</span>
                 </button>
                 <button class="vaga">
-                    <img src="./src/assets/carro.png" alt="" width="120px">
+                    <img src="./src/assets/carro_preto.png" alt="" width="60px">
                 </button>
                 <button class="vaga">
-                    <span>6</span>
+                    <span>A6</span>
                 </button>
             </div>
         </section>
         <section class="categorias">
             <button class="areas">
-                <p>Area 1</p>
+                <p>Área A</p>
             </button>
             <button class="areas">
-                <p>Area 2</p>
+                <p>Área B</p>
             </button>
             <button class="areas">
-                <p>Area 3</p>
+                <p>Área C</p>
             </button>
         </section>
-        <button class="opcoes">Mais Opções</button>
+        <button class="opcoes" id="openPopupBtn">Mais Opções</button>
     </main>
     <aside id="info-card">
         <div class="card">
-            <div class="card">
-                <form action="">
-                    <label for="placa">PLACA:</label>
-                    <input type="text" name="placa" id="placa">
-                    <label for="modelo">MODELO:</label>
-                    <input type="text" name="modelo" id="modelo">
-                    <label for="cor">COR</label>
-                    <input type="text" name="cor" id="cor">
-                    <label for="ano">ANO:</label>
-                    <input type="text" name="ano" id="ano">
-                    <button class="add">Adicionar</button>
-                    <button class="delete">Excluir</button>
-                </form>
-            </div>
+            <form action="">
+                <label for="placa">PLACA:</label>
+                <input type="text" name="placa" id="placa">
+                <label for="modelo">MODELO:</label>
+                <input type="text" name="modelo" id="modelo">
+                <label for="cor">COR</label>
+                <input type="text" name="cor" id="cor">
+                <label for="ano">ANO:</label>
+                <input type="text" name="ano" id="ano">
+                <button class="add">Adicionar</button>
+                <button class="delete">Excluir</button>
+            </form>
         </div>
     </aside>
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <span id="closePopupBtn" class="close">&times;</span>
+            <h1 style="text-align: start; border-bottom: 1px solid rgb(253, 253, 253);">OPÇÕES</h1>
+            <div class="content">
+                <div class="lateral">
+                    <div class="list">
+                        <div class="li">
+                            <p>Últimos clientes</p>
+                        </div>
+                        <br>
+                        <div class="li">
+                            <p>Custo por hora</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-list">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>DATA</th>
+                                <th>HORÁRIO</th>
+                                <th>VAGA</th>
+                                <th>PLACA</th>
+                                <th>MODELO</th>
+                                <th>COR</th>
+                                <th>ANO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dados 1</td>
+                                <td>Dados 2</td>
+                                <td>Dados 3</td>
+                                <td>Dados 4</td>
+                                <td>Dados 5</td>
+                                <td>Dados 6</td>
+                                <td>Dados 7</td>
+                            </tr>
+                            <tr>
+                                <td>Dados 1</td>
+                                <td>Dados 2</td>
+                                <td>Dados 3</td>
+                                <td>Dados 4</td>
+                                <td>Dados 5</td>
+                                <td>Dados 6</td>
+                                <td>Dados 7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./src/js/script.js"></script>
 </body>
+
 </html>
