@@ -55,6 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
         amarela: '../src/assets/carro_amarelo.png'
     };
 
+    // Objeto para rastrear quais vagas estão ocupadas
+    const vagasOcupadas = {
+        vaga1: false,
+        vaga2: false,
+        vaga3: false,
+        vaga4: false,
+        vaga5: false,
+        vaga6: false,
+        vaga7: false,
+        vaga8: false,
+        vaga9: false,
+        vaga10: false,
+        vaga11: false,
+        vaga12: false,
+    };
+
     vagaButtons.forEach(button => {
         button.addEventListener('click', (event) => {
             currentVaga = event.currentTarget.dataset.vaga;
@@ -63,12 +79,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function openPopup() {
+        if (currentVaga && vagasOcupadas[currentVaga]) {
+            showPopupMessage('A vaga já está ocupada.');
+            return;
+        }
+
         placaInput.value = '';
         modeloInput.value = '';
         corInput.value = '';
         anoInput.value = '';
 
+        // Remove o elemento label existente antes de adicionar um novo
+        const existingVagaLabel = document.querySelector('.vaga-label');
+        if (existingVagaLabel) {
+            existingVagaLabel.remove();
+        }
+
+        // Chamar a função para mostrar o número da vaga
+        showVagaLabel(currentVaga);
+
         popup.style.display = 'block';
+    }
+
+    function showVagaLabel(vaga) {
+        const placaInput = document.getElementById('placa');
+        const vagaLabel = document.createElement('label');
+        vagaLabel.setAttribute('for', 'placa');
+        vagaLabel.textContent = `Vaga ${vaga}`;
+        vagaLabel.classList.add('vaga-label');
+        placaInput.parentNode.insertBefore(vagaLabel, placaInput);
     }
 
     document.querySelector('.close').addEventListener('click', () => {
@@ -80,10 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const modelo = modeloInput.value;
         const cor = corInput.value;
         const ano = anoInput.value;
-    
+
         if (modelo && cor && ano) {
             if (validarCor(cor)) {
                 updateVaga(currentVaga, modelo, cor, ano);
+                vagasOcupadas[currentVaga] = true; // Marcar a vaga como ocupada
                 popup.style.display = 'none';
             } else {
                 showPopupMessage('A cor digitada não existe. Por favor, coloque uma cor válida.');
@@ -96,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteButton.addEventListener('click', (event) => {
         event.preventDefault();
         clearVaga(currentVaga);
+        vagasOcupadas[currentVaga] = false; // Marcar a vaga como desocupada
         popup.style.display = 'none';
     });
 
@@ -171,4 +212,5 @@ document.addEventListener('DOMContentLoaded', () => {
         handleInputs(anoInput);
     });
 });
+
 
