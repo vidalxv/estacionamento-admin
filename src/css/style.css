@@ -42,14 +42,72 @@ label {
     font-weight: bold;
 }
 
+#info-card {
+    margin-top: 15%;
+    display: none;
+    position: fixed;
+    width: 20%;
+    height: 30%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.card {
+    position: relative;
+    background-color: #333;
+    padding: 35px 30px 20px 30px;
+    border-radius: 10px;
+    width: 700px;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
 input {
     outline: none;
     border-radius: 10px;
+    width: 96%;
     border: 0;
-    height: 30px;
+    height: 35px;
     margin-top: 5px;
     margin-bottom: 10px;
     padding-left: 10px;
+    background-color: #252525;
+    color: #fff;
+}
+
+.add {
+    background-color: purple;
+    border: 0;
+    color: white;
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.delete {
+    margin-top: 5px;
+    background-color: rgb(173, 14, 14);
+    border: 0;
+    color: rgb(255, 255, 255);
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .vaga {
@@ -78,6 +136,10 @@ input {
     transform: rotate(90deg);
 }
 
+.car-image {
+    transform: rotate(90deg);
+}
+
 .areas {
     color: black;
     margin: 20px;
@@ -96,47 +158,9 @@ input {
 }
 
 aside {
-    margin-top: 100px;
-    background-color: rgb(36, 36, 36);
-    border-radius: 30px;
-    width: 250px;
-    height: 350px;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: -1px 1px 50px rgba(255, 255, 255, 0.067);
-}
-
-.card {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    width: 80%;
-}
-
-.add {
-    background-color: purple;
-    border: 1px solid rgb(137, 92, 151);
-    color: white;
-    width: 100%;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.delete {
-    margin-top: 10px;
-    background-color: rgb(51, 30, 28);
-    border: 1px solid rgb(255, 9, 9);
-    color: rgb(163, 21, 21);
-    width: 100%;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
+    align-items: center;
 }
 
 .content-opcoes {
@@ -155,16 +179,6 @@ aside {
     font-size: 12px;
     font-weight: bold;
     cursor: pointer;
-}
-
-#info-card {
-    display: none;
-}
-
-#info-card.visible {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
 }
 
 .popup {

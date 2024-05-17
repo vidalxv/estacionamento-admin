@@ -47,43 +47,43 @@
         <h1 style="text-align: center;">ÁREA A</h1>
         <section class="vagas">
             <div class="vaga-a">
-                <button class="vaga">
-                    <img id="carro" src="./src/assets/carro_amarelo.png" alt="" width="60px">
+                <button class="vaga" data-vaga="A1">
+                    <span>A1</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A2">
                     <span>A2</span>
                 </button>
-                <button class="vaga">
-                    <img id="carro" src="./src/assets/carro_azul.png" alt="" width="60px">
+                <button class="vaga" data-vaga="A3">
+                    <span>A3</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A4">
                     <span>A4</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A5">
                     <span>A5</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A6">
                     <span>A6</span>
                 </button>
             </div>
             <div class="vaga-b">
-                <button class="vaga">
-                    <span>A5</span>
-                </button>
-                <button class="vaga">
-                    <img id="carro" src="./src/assets/carro_preto.png" alt="" width="60px">
-                </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A7">
                     <span>A7</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A8">
                     <span>A8</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A9">
                     <span>A9</span>
                 </button>
-                <button class="vaga">
+                <button class="vaga" data-vaga="A10">
                     <span>A10</span>
+                </button>
+                <button class="vaga" data-vaga="A11">
+                    <span>A11</span>
+                </button>
+                <button class="vaga" data-vaga="A12">
+                    <span>A12</span>
                 </button>
             </div>
         </section>
@@ -105,17 +105,16 @@
     </main>
     <aside id="info-card">
         <div class="card">
+            <button class="close">&times;</button>
             <form action="">
-                <label for="placa">PLACA:</label>
-                <input type="text" name="placa" id="placa">
-                <label for="modelo">MODELO:</label>
-                <input type="text" name="modelo" id="modelo">
-                <label for="cor">COR</label>
-                <input type="text" name="cor" id="cor">
-                <label for="ano">ANO:</label>
-                <input type="text" name="ano" id="ano">
-                <button class="add">Adicionar</button>
-                <button class="delete">Excluir</button>
+                <div class="vaga-vazia">
+                    <input type="text" name="placa" id="placa" placeholder="Placa">
+                    <input type="text" name="modelo" id="modelo" placeholder="Modelo">
+                    <input type="text" name="cor" id="cor" placeholder="Cor">
+                    <input type="text" name="ano" id="ano" placeholder="Ano">
+                    <button class="add">Adicionar</button>
+                    <button class="delete">Excluir</button>
+                </div>
             </form>
         </div>
     </aside>
