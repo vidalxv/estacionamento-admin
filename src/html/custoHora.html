@@ -1,46 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Estacionamento - Custo Hora</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="shortcut icon" type="imagex/ico" href="/src/assets/logo-ico.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link
+      rel="shortcut icon"
+      type="imagex/ico"
+      href="/src/assets/logo-ico.ico"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
 
-<body>
+  <body>
     <nav>
-        <div class="logo-name">
-          <div class="logo-image">
-            <img id="logo" src="/src/assets/logo-black-white.png" alt="logo-top" width="50px"/>
-          </div>
-          <span class="logo_name">Estacionamento</span>
+      <div class="logo-name">
+        <div class="logo-image">
+          <img
+            id="logo"
+            src="/src/assets/logo-black-white.png"
+            alt="logo-top"
+            width="50px"
+          />
         </div>
-        <div class="menu-items">
-          <ul class="nav-links">
-            <li>
-              <a href="/index.html">
-                <i class="fa-solid fa-house"></i>
-                <span class="link-name">Inicio</span>
-              </a>
-            </li>
-            <li>
-              <a href="/src/html/listCliente.html">
-                <i class="fa-solid fa-list-ul"></i>
-                <span class="link-name">Lista de Clientes</span>
-              </a>
-            </li>
-            <li>
-              <a href="/src/html/custoHora.html" style="color: #a200ff;">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span class="link-name">Custo Hora</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-</body>
-
+        <span class="logo_name">Estacionamento</span>
+      </div>
+      <div class="menu-items">
+        <ul class="nav-links">
+          <li>
+            <a href="/index.html">
+              <i class="fa-solid fa-house"></i>
+              <span class="link-name">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a href="/src/html/listCliente.html">
+              <i class="fa-solid fa-list-ul"></i>
+              <span class="link-name">Lista de Clientes</span>
+            </a>
+          </li>
+          <li>
+            <a href="/src/html/custoHora.html" style="color: #a200ff">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+              <span class="link-name">Custo Hora</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <main>
+      <div>
+        <input class="add-vaga"
+          type="text"
+          style="background-color: rgb(241, 241, 241);"
+          placeholder="Custo Por Hora"
+        />
+        <button class="add">
+          Atualizar Valor <i class="fa-solid fa-dollar-sign"></i>
+        </button>
+      </div>
+    </main>
+  </body>
 </html>

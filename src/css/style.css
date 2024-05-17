@@ -8,7 +8,7 @@ body {
     color: white;
     background-color: rgb(17, 17, 17);
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 main {
@@ -72,7 +72,7 @@ label {
     color: #6e6e6e;
 }
 
-input {
+.add-vaga {
     outline: none;
     border-radius: 10px;
     width: 97%;
