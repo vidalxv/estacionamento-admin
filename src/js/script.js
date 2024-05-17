@@ -38,9 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Objeto com as URLs das imagens por cor
     const imagensCarro = {
         branco: '../src/assets/carro_branco.png',
+        branca: '../src/assets/carro_branco.png',
         preto: '../src/assets/carro_preto.png',
+        preta: '../src/assets/carro_preto.png',
         azul: '../src/assets/carro_azul.png',
         vermelho: '../src/assets/carro_vermelho.png',
+        vermelha: '../src/assets/carro_vermelho.png',
         laranja: '../src/assets/carro_laranja.png',
         marrom: '../src/assets/carro_marrom.png',
         prata: '../src/assets/carro_prata.png',
@@ -48,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         roxo: '../src/assets/carro_roxo.png',
         verde: '../src/assets/carro_verde.png',
         cinza: '../src/assets/carro_cinza.png',
-        amarelo: '../src/assets/carro_amarelo.png'
+        amarelo: '../src/assets/carro_amarelo.png',
+        amarela: '../src/assets/carro_amarelo.png'
     };
 
     vagaButtons.forEach(button => {
@@ -82,10 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateVaga(currentVaga, modelo, cor, ano);
                 popup.style.display = 'none';
             } else {
-                alert('A cor digitada não existe. Por favor, escolha uma cor válida.');
+                showPopupMessage('A cor digitada não existe. Por favor, coloque uma cor válida.');
             }
         } else {
-            alert('Por favor, preencha todos os campos corretamente.');
+            showPopupMessage('Por favor, preencha todos os campos corretamente.');
         }
     });
 
@@ -114,4 +118,57 @@ document.addEventListener('DOMContentLoaded', () => {
         const coresPermitidas = Object.keys(imagensCarro);
         return coresPermitidas.includes(cor.toLowerCase());
     }
+
+    function showPopupMessage(message) {
+        const popupMessage = document.getElementById('popup-message');
+        popupMessage.textContent = message;
+        popupMessage.classList.add('show');
+
+        setTimeout(() => {
+            popupMessage.classList.remove('show');
+        }, 3000);
+    }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const placaInput = document.getElementById('placa');
+    const modeloInput = document.getElementById('modelo');
+    const corInput = document.getElementById('cor');
+    const anoInput = document.getElementById('ano');
+
+    function handleInputs(inputElement) {
+        let inputValue = inputElement.value;
+
+        if (inputElement === placaInput) {
+            inputValue = inputValue.toUpperCase();
+
+            if (inputValue.length > 7) {
+                inputValue = inputValue.slice(0, 7);
+            }
+        } else if (inputElement === anoInput) {
+            inputValue = inputValue.replace(/\D/g, '');
+            inputValue = inputValue.slice(0, 4);
+        } else {
+            inputValue = inputValue.toUpperCase();
+        }
+
+        inputElement.value = inputValue;
+    }
+
+    placaInput.addEventListener('input', () => {
+        handleInputs(placaInput);
+    });
+
+    modeloInput.addEventListener('input', () => {
+        handleInputs(modeloInput);
+    });
+
+    corInput.addEventListener('input', () => {
+        handleInputs(corInput);
+    });
+
+    anoInput.addEventListener('input', () => {
+        handleInputs(anoInput);
+    });
+});
+
