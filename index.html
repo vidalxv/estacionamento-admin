@@ -4,48 +4,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estacionamento - Inicio</title>
-    <link rel="stylesheet" href="./src/css/style.css">
-    <link rel="shortcut icon" type="imagex/ico" href="/src/assets/logo-ico.ico">
+    <title>Estacionamento</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" type="imagex/ico" href="/assets/logo-ico.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script defer src="/src/js/script.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .nav-link.active {
+            color: #c825fa;
+        }
+    </style>
 </head>
+
 <body>
-    <div id="popup-message"></div>
     <nav>
         <div class="logo-name">
-          <div class="logo-image">
-            <img id="logo" src="/src/assets/logo-black-white.png" alt="logo-top" width="50px"/>
-          </div>
-          <span class="logo_name">Estacionamento</span>
+            <div class="logo-image">
+                <img id="logo" src="/assets/logo-black-white.png" alt="logo-top" width="50px" />
+                <span>AutoSavvy<br>Park</span>
+            </div>
         </div>
         <div class="menu-items">
-          <ul class="nav-links">
-            <li>
-              <a href="index.html" style="color: #a200ff;">
-                <i class="fa-solid fa-house"></i>
-                <span class="link-name">Inicio</span>
-              </a>
-            </li>
-            <li>
-              <a href="/src/html/listCliente.html">
-                <i class="fa-solid fa-list-ul"></i>
-                <span class="link-name">Lista de Clientes</span>
-              </a>
-            </li>
-            <li>
-              <a href="/src/html/custoHora.html">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span class="link-name">Custo Hora</span>
-              </a>
-            </li>
-          </ul>
+            <ul class="nav-links">
+                <li>
+                    <a href="#" class="nav-link active" data-target="home-section">
+                        <i class="fa-solid fa-house"></i>
+                        <span class="link-name">Inicio</span>
+                    </a>
+                </li>
+                <br>
+                <li>
+                    <a href="#" class="nav-link" data-target="vagas-section">
+                        <i class="fa-solid fa-car"></i>
+                        <span class="link-name">Vagas</span>
+                    </a>
+                </li>
+                <br>
+                <li>
+                    <a href="#" class="nav-link" data-target="clientes-section">
+                        <i class="fa-solid fa-list-ul"></i>
+                        <span class="link-name">Lista de Clientes</span>
+                    </a>
+                </li>
+                <br>
+                <li>
+                    <a href="#" class="nav-link" data-target="custo-section">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span class="link-name">Custo Minuto</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-      </nav>
-    <main id="main">
-        <div class="container-vaga">
+    </nav>
+    <section id="home-section" class="home">
+        <h1>PREENCHER DADOS</h1>
+        <input class="add-vaga" type="text" name="placa" id="placa" placeholder="Placa" maxlength="8" required>
+        <input class="add-vaga" type="text" name="modelo" id="modelo" placeholder="Modelo" minlength="3" required>
+        <input class="add-vaga" type="text" name="nome" id="nome" placeholder="Nome" minlength="3" required>
+        <input class="add-vaga" type="text" name="contato" id="contato" placeholder="Contato" maxlength="15" required>
+        <button class="add" id="btn">Adicionar Veiculo <i class="fa-solid fa-plus"></i></button>
+        <div id="popup-message"></div>
+    </section>
+    <section id="vagas-section" class="vagas hidden">
         <h1 style="text-align: center;">ÁREA A</h1>
-        <section class="vagas">
+        <div class="container-vaga">
             <div class="vaga-a">
                 <button class="vaga" data-vaga="A1">
                     <span>A1</span>
@@ -86,37 +111,57 @@
                     <span>A12</span>
                 </button>
             </div>
-        </section>
-        <section class="categorias">
-            <button class="areas">
-                <p>Área A</p>
-            </button>
-            <button class="areas">
-                <p>Área B</p>
-            </button>
-            <button class="areas">
-                <p>Área C</p>
-            </button>
-        </section>
-        <div class="content-opcoes">
-            <button class="opcoes" id="openPopupBtn">Mais Opções</button>
+            <section class="categorias">
+                <button class="areas">
+                    <p>Área A</p>
+                </button>
+                <button class="areas">
+                    <p>Área B</p>
+                </button>
+                <button class="areas">
+                    <p>Área C</p>
+                </button>
+            </section>
         </div>
-    </div>
-    </main>
-    <aside id="info-card">
-        <div class="card">
-            <button class="close"><i class="fa-solid fa-xmark"></i></button>
-            <form action="">
-                <div class="vaga-vazia">
-                    <input class="add-vaga" type="text" name="placa" id="placa" placeholder="Placa">
-                    <input class="add-vaga" type="text" name="modelo" id="modelo" placeholder="Modelo">
-                    <input class="add-vaga" type="text" name="cor" id="cor" placeholder="Cor">
-                    <input class="add-vaga" type="text" name="ano" id="ano" placeholder="Ano">
-                    <button class="add">Adicionar</button>
-                </div>
-            </form>
+    </section>
+    <section id="clientes-section" class="clientes hidden">
+        <div class="clientes-content">
+            <h1>HISTORICO</h1>
+            <table id="tabelaClientes">
+                <thead>
+                    <tr>
+                        <th>DATA</th>
+                        <th>HORÁRIO</th>
+                        <th>PLACA</th>
+                        <th>MODELO</th>
+                        <th>CONTATO</th>
+                        <th>NOME</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
         </div>
-    </aside>
+    </section>
+    <section id="custo-section" class="custo hidden">
+        <h1 style="text-align: center;">PREÇO POR MINUTO</h1>
+        <div>
+            <input class="add-vaga" id="addvalor" type="number" format="currency" placeholder="Custo Por Minuto" maxlength="10" />
+            <button class="add" id="atualizar">
+                Atualizar Valor <i class="fa-solid fa-dollar-sign"></i>
+            </button>
+        </div>
+    </section>
+    <script src="js/formater.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"></script>
+    <script type="module" src="/js/firebase.js"></script>
+    <script type="module" src="/js/submit.js"></script>
+    <script type="module" src="/js/clientes.js"></script>
+    <script type="module" src="/js/custo.js"></script>
+    <script type="module" src="/js/vagas.js"></script>
+    <script defer src="/js/sections.js"></script>
 </body>
 
 </html>
