@@ -425,3 +425,36 @@ nav .menu-items{
     text-decoration: none;
     transition: color 0.3s ease;
   }
+
+  #info-pay {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+  .ticket {
+    background-color: rgb(238, 238, 238);
+    margin: 20px;
+    color: #000000;
+    border-radius: 15px;
+    padding: 20px;
+    font-weight: bold;
+    width: calc(40% - 20px);
+  }
+
+
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 50%;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: rgb(0, 0, 0); /* Cor do popup */
+    color: #ffffff;
+    border-radius: 10px;
+    z-index: 1000;
+    font-size: 16px;
+}

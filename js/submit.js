@@ -17,15 +17,16 @@ async function adicionarVeiculo() {
     const modelo = document.getElementById("modelo").value;
     const nome = document.getElementById("nome").value;
     const contato = document.getElementById("contato").value;
-    
+
     const dataHoraAtual = new Date();
     const dataFormatada = dataHoraAtual.toLocaleDateString();
     const horaFormatada = dataHoraAtual.toLocaleTimeString();
 
     if (placa === "" || modelo === "" || nome === "" || contato === "") {
-        showPopupMessage('Por favor, preencha todos os campos corretamente.')
+        showPopupMessage('Por favor, preencha todos os campos corretamente.');
         return;
     }
+
     try {
         await addDoc(collection(db, "veiculos"), {
             placa: placa,
@@ -41,11 +42,37 @@ async function adicionarVeiculo() {
         document.getElementById("modelo").value = "";
         document.getElementById("nome").value = "";
         document.getElementById("contato").value = "";
+
+        const ddd = contato.substring(0, 2);
+        const numero = contato.substring(2);
+        const chatId = `55${ddd}${numero}@c.us`;
+
+        const messageBody = {
+            chatId: "557582951810@c.us",
+            contentType: "string",
+            content: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
+        };
+
+        const response = await fetch('http://localhost:3000/client/sendMessage/estacionamento', {
+            method: 'POST',
+            headers: {
+                'accept': '*/*',
+                'x-api-key': 'estacionamento',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(messageBody)
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao enviar mensagem: ' + response.statusText);
+        }
+
+        const result = await response.json();
+        console.log("Mensagem enviada com sucesso:", result);
     } catch (error) {
-        console.error("Erro ao adicionar veículo:", error);
+        console.error("Erro ao adicionar veículo ou enviar mensagem:", error);
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.querySelector("#btn");

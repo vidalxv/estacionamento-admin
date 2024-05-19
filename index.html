@@ -37,6 +37,13 @@
                 </li>
                 <br>
                 <li>
+                    <a href="#" class="nav-link" data-target="pagamento-section">
+                        <i class="fa-solid fa-money-bill"></i>
+                        <span class="link-name">Pagamento</span>
+                    </a>
+                </li>
+                <br>
+                <li>
                     <a href="#" class="nav-link" data-target="vagas-section">
                         <i class="fa-solid fa-car"></i>
                         <span class="link-name">Vagas</span>
@@ -67,6 +74,20 @@
         <input class="add-vaga" type="text" name="contato" id="contato" placeholder="Contato" maxlength="15" required>
         <button class="add" id="btn">Adicionar Veiculo <i class="fa-solid fa-plus"></i></button>
         <div id="popup-message"></div>
+    </section>
+    <section id="pagamento-section" class="pagamento hidden">
+        <div class="content-pagamentos">
+            <div class="info-pay" id="info-pay">
+            </div>
+        </div>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close" id="close">&times;</span>
+                <h2>Detalhes do Pagamento</h2>
+                <p id="popup-message"></p>
+                <button id="pagar">Pagar Agora</button>
+            </div>
+        </div>        
     </section>
     <section id="vagas-section" class="vagas hidden">
         <h1 style="text-align: center;">ÁREA A</h1>
@@ -161,6 +182,7 @@
     <script type="module" src="/js/clientes.js"></script>
     <script type="module" src="/js/custo.js"></script>
     <script type="module" src="/js/vagas.js"></script>
+    <script type="module" src="/js/ticket.js"></script>
     <script defer src="/js/sections.js"></script>
 </body>
 
