@@ -16,10 +16,10 @@ function carregarClientes() {
                 <p>Modelo: ${data.modelo}</p>
                 <p>Nome: ${data.nome}</p>
                 <div>
-                    <button class="add" id="checkout"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
+                    <button class="add" data-id="${doc.id}"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
                 </div>
             `;
-            document.getElementById("info-pay").appendChild(newRow); // Adiciona a nova linha ao elemento pai
+            document.getElementById("info-pay").appendChild(newRow);
         });
     }).catch((error) => {
         console.log("Erro ao carregar ticket:", error);
@@ -35,30 +35,49 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("Botão 'Finalizar' clicado");
 
             try {
-                const configuracoesRef = doc(db, "configuracoes", "custoPorMinuto");
-                const docSnapshot = await getDoc(configuracoesRef);
+                const docId = target.getAttribute("data-id");
+
+                const docSnapshot = await getDoc(doc(db, "veiculos", docId));
 
                 if (docSnapshot.exists()) {
-                    const custoPorMinuto = docSnapshot.data().valor;
-                    console.log("Custo por minuto:", custoPorMinuto);
+                    const data = docSnapshot.data();
+                    const placa = data.placa;
+                    const modelo = data.modelo;
+                    const nome = data.nome;
+                    const dataHoraEntradaString = data.data + " " + data.hora; // Combine data e hora em uma string
+                    const dataHoraEntrada = new Date(dataHoraEntradaString); // Converta a string em um objeto Date
+                    const dataHoraSaida = new Date(); // Data e hora atuais
+                    const tempoEstacionamentoEmMilissegundos = dataHoraSaida - dataHoraEntrada; // Calcule a diferença de tempo em milissegundos
+                    const tempoEstacionamentoEmMinutos = Math.ceil(tempoEstacionamentoEmMilissegundos / (1000 * 60)); // Converta para minutos e arredonde para cima
 
-                    const tempoEstacionamento = 60;
+                    const configuracoesRef = doc(db, "configuracoes", "custoPorMinuto");
+                    const configuracoesSnapshot = await getDoc(configuracoesRef);
 
-                    const custoTotal = custoPorMinuto * tempoEstacionamento;
-                    console.log("Custo total:", custoTotal);
+                    if (configuracoesSnapshot.exists()) {
+                        const custoPorMinuto = configuracoesSnapshot.data().valor;
+                        console.log("Custo por minuto:", custoPorMinuto);
 
-                    const mensagem = `
-                        <p>Tempo de estacionamento: ${tempoEstacionamento} minutos</p>
-                        <p>Custo por minuto: ${custoPorMinuto}</p>
-                        <p>Custo total: ${custoTotal} unidades monetárias</p>
-                    `;
-                    document.getElementById("popup-message").innerHTML = mensagem;
-                    document.getElementById("popup").style.display = "block";
+                        const custoTotal = custoPorMinuto * tempoEstacionamentoEmMinutos;
+                        console.log("Custo total:", custoTotal);
+
+                        const mensagem = `
+                            <p>Placa: ${placa}</p>
+                            <p>Modelo: ${modelo}</p>
+                            <p>Nome: ${nome}</p>
+                            <p>Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
+                            <p>Custo por minuto: ${custoPorMinuto}</p>
+                            <p>Custo total: ${custoTotal} unidades monetárias</p>
+                        `;
+                        document.getElementById("popup-message").innerHTML = mensagem;
+                        document.getElementById("popup").style.display = "block"; // Exibe o popup
+                    } else {
+                        console.log("Documento 'custporminuto' não encontrado.");
+                    }
                 } else {
-                    console.log("Documento 'custporminuto' não encontrado.");
+                    console.log("Documento do veículo não encontrado.");
                 }
             } catch (error) {
-                console.log("Erro ao obter custo por minuto:", error);
+                console.log("Erro ao obter informações do veículo:", error);
             }
         }
     });

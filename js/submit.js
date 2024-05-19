@@ -16,11 +16,14 @@ async function adicionarVeiculo() {
     const placa = document.getElementById("placa").value;
     const modelo = document.getElementById("modelo").value;
     const nome = document.getElementById("nome").value;
-    const contato = document.getElementById("contato").value;
+    let contato = document.getElementById("contato").value;
 
     const dataHoraAtual = new Date();
     const dataFormatada = dataHoraAtual.toLocaleDateString();
     const horaFormatada = dataHoraAtual.toLocaleTimeString();
+
+    // Remover caracteres não numéricos do número de telefone
+    contato = contato.replace(/\D/g, "");
 
     if (placa === "" || modelo === "" || nome === "" || contato === "") {
         showPopupMessage('Por favor, preencha todos os campos corretamente.');
@@ -45,19 +48,20 @@ async function adicionarVeiculo() {
 
         const ddd = contato.substring(0, 2);
         const numero = contato.substring(2);
-        const chatId = `55${ddd}${numero}@c.us`;
+        const ddi = "55"; // Código do Brasil
+        const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
         const messageBody = {
-            chatId: "557582951810@c.us",
+            chatId: `55${ddd}${numero}@c.us`,
             contentType: "string",
             content: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
         };
 
-        const response = await fetch('http://localhost:3000/client/sendMessage/estacionamento', {
+        const response = await fetch('https://wpp-z4rv.onrender.com/client/sendMessage/estacionamento', {
             method: 'POST',
             headers: {
                 'accept': '*/*',
-                'x-api-key': 'estacionamento',
+                'x-api-key': 'daniel',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(messageBody)

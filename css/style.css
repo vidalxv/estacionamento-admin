@@ -111,7 +111,6 @@ label {
 }
 
 #popup-message {
-    display: none;
     position: fixed;
     bottom: 20px;
     left: 60%;
@@ -263,14 +262,20 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
+
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
+    white-space: nowrap; /* Evita que o texto seja quebrado em várias linhas */
+    overflow: hidden; /* Oculta qualquer conteúdo que não caiba dentro da célula */
+    text-overflow: ellipsis; /* Exibe reticências (...) para indicar que há mais conteúdo oculto */
 }
+
 th {
     background-color: #5c185c;
     text-align: left;
 }
+
 .hidden {
     display: none;
 }
