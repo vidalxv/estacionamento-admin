@@ -14,7 +14,7 @@
         }
 
         .nav-link.active {
-            color: #c825fa;
+            color:  #007bff;
         }
     </style>
 </head>
@@ -83,11 +83,12 @@
         <div id="popup" class="popup">
             <div class="popup-content">
                 <span class="close" id="close">&times;</span>
-                <h2>Detalhes do Pagamento</h2>
-                <p id="popup-message"></p>
-                <button id="pagar">Pagar Agora</button>
+                <div class="pcontent">
+                    <h2>Detalhes do Pagamento</h2>
+                    <div id="popup-ticket"></div>
+                </div>
             </div>
-        </div>        
+        </div>
     </section>
     <section id="vagas-section" class="vagas hidden">
         <h1 style="text-align: center;">ÁREA A</h1>
@@ -160,7 +161,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+
                 </tbody>
             </table>
         </div>
@@ -168,7 +169,8 @@
     <section id="custo-section" class="custo hidden">
         <h1 style="text-align: center;">PREÇO POR MINUTO</h1>
         <div>
-            <input class="add-vaga" id="addvalor" type="number" format="currency" placeholder="Custo Por Minuto" maxlength="10" />
+            <input class="add-vaga" id="addvalor" type="number" format="currency" placeholder="Custo Por Minuto"
+                maxlength="10" />
             <button class="add" id="atualizar">
                 Atualizar Valor <i class="fa-solid fa-dollar-sign"></i>
             </button>

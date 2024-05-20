@@ -57,7 +57,7 @@ async function adicionarVeiculo() {
             content: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
         };
 
-        const response = await fetch('https://wpp-z4rv.onrender.com/client/sendMessage/estacionamento', {
+        const response = await fetch('http://localhost:3000/client/sendMessage/estacionamento', {
             method: 'POST',
             headers: {
                 'accept': '*/*',

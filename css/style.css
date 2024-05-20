@@ -85,7 +85,7 @@ label {
 }
 
 .add {
-    background-color: purple;
+    background-color: #007bff;
     border: 0;
     color: white;
     width: 100%;
@@ -95,6 +95,19 @@ label {
     font-weight: bold;
     cursor: pointer;
     margin-top: 5px;
+}
+
+ #pagar {
+    background-color: rgb(10, 153, 41);
+    margin-top: 20px;
+    border: 0;
+    color: white;
+    width: 100%;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .delete {
@@ -111,6 +124,7 @@ label {
 }
 
 #popup-message {
+    display: none;
     position: fixed;
     bottom: 20px;
     left: 60%;
@@ -121,6 +135,26 @@ label {
     border-radius: 5px;
     z-index: 1000;
     font-size: 23px;
+}
+.pcontent {
+    display: flex;
+    flex-direction: column;
+}
+#popup-ticket{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#popup-ticket p{
+    margin-top: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    padding: 15px;
+    color: #fff;
+    font-size: 23px;
+    display: flex;
+    align-items: flex-end;
 }
 
 #popup-message.show {
@@ -153,7 +187,7 @@ label {
 
 .vaga {
     color: white;
-    background-color: rgb(88, 48, 138);
+    background-color: rgb(48, 69, 138);
     border: 1px solid white;
     width: 140px;
     height: 70px;
@@ -196,30 +230,6 @@ label {
 
 .areas:hover {
     box-shadow: -1px 1px 10px rgba(104, 103, 106, 0.691);
-}
-
-aside {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.content-opcoes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.opcoes {
-    background-color: rgb(53, 27, 53);
-    border: 1px solid rgb(194, 126, 214);
-    color: white;
-    width: 60%;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .content {
@@ -272,7 +282,7 @@ th, td {
 }
 
 th {
-    background-color: #5c185c;
+    background-color:  #007bff;
     text-align: left;
 }
 
@@ -281,7 +291,7 @@ th {
 }
 :root{
     /* ===== Cores ===== */
-    --primary-color: #a200ff;
+    --primary-color:  #007bff;
     --panel-color: #333;
     --text-color: #ffffff;
     --black-light-color: #ffffff;
@@ -437,29 +447,103 @@ nav .menu-items{
     justify-content: space-between;
 }
 
-  .ticket {
-    background-color: rgb(238, 238, 238);
+.ticket {
+    font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 18px;
+    background-color: #f8f8f8; /* Fundo claro */
     margin: 20px;
     color: #000000;
     border-radius: 15px;
     padding: 20px;
     font-weight: bold;
-    width: calc(40% - 20px);
-  }
+    width: calc(40% - 40px); /* Ajusta a largura considerando padding e margem */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
+    border: 2px solid #ccc; /* Borda cinza */
+    position: relative; /* Necessário para os elementos decorativos */
+    font-family: 'Courier New', Courier, monospace; /* Fonte que lembra ticket */
+}
+
+.ticket::before, .ticket::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(to right, transparent 50%, #ccc 50%);
+    background-size: 20px 10px;
+}
+
+.ticket::before {
+    top: -10px; /* Posiciona acima do elemento */
+    left: 0;
+}
+
+.ticket::after {
+    bottom: -10px; /* Posiciona abaixo do elemento */
+    left: 0;
+}
+
+.ticket .ticket-header {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 10px;
+}
+
+.ticket p {
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+.ticket .ticket-footer {
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+}
+
+.ticket .add {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 0.9em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.ticket .add:hover {
+    background-color: #0056b3;
+}
 
 
 #popup {
     display: none;
+    justify-content: center;
     position: fixed;
     top: 50%;
     left: 50%;
-    height: 50%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    background-color: rgb(0, 0, 0); /* Cor do popup */
-    color: #ffffff;
-    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.884); /* Cor do popup */
+    backdrop-filter: blur(5px); /* Desfoque do fundo */
+    box-shadow: 1px 1px 100px rgb(41, 0, 43);
     z-index: 1000;
     font-size: 16px;
+}
+
+.popup-content {
+    position: fixed;
+    top: 15%;
+    left: 23%;
+    width: 50%;
+    padding: 20px;
+    color: #ffffff;
+    border-radius: 10px;
 }

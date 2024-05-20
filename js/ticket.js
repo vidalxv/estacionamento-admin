@@ -10,15 +10,16 @@ function carregarClientes() {
             const newRow = document.createElement("div"); 
             newRow.classList.add("ticket");
             newRow.innerHTML = `
-                <p>Data: ${data.data}</p>
-                <p>Hora: ${data.hora}</p>
-                <p>Placa: ${data.placa}</p>
-                <p>Modelo: ${data.modelo}</p>
-                <p>Nome: ${data.nome}</p>
-                <div>
-                    <button class="add" data-id="${doc.id}"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
-                </div>
-            `;
+            <div class="ticket-header">Ticket do Estacionamento</div>
+            <p>Data: ${data.data}</p>
+            <p>Hora: ${data.hora}</p>
+            <p>Placa: ${data.placa}</p>
+            <p>Modelo: ${data.modelo}</p>
+            <p>Nome: ${data.nome}</p>
+            <div class="ticket-footer">
+                <button class="add" data-id="${doc.id}"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
+            </div>
+        `;
             document.getElementById("info-pay").appendChild(newRow);
         });
     }).catch((error) => {
@@ -36,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 const docId = target.getAttribute("data-id");
-
                 const docSnapshot = await getDoc(doc(db, "veiculos", docId));
 
                 if (docSnapshot.exists()) {
@@ -44,11 +44,29 @@ document.addEventListener("DOMContentLoaded", () => {
                     const placa = data.placa;
                     const modelo = data.modelo;
                     const nome = data.nome;
-                    const dataHoraEntradaString = data.data + " " + data.hora; // Combine data e hora em uma string
-                    const dataHoraEntrada = new Date(dataHoraEntradaString); // Converta a string em um objeto Date
+
+                    // Debugging logs
+                    console.log("Data:", data.data);
+                    console.log("Hora:", data.hora);
+
+                    // Formatar data e hora para o formato adequado
+                    const dataParts = data.data.split('/');
+                    const formattedDate = `${dataParts[2]}-${dataParts[1]}-${dataParts[0]}`;
+                    const dataHoraEntradaString = `${formattedDate}T${data.hora}`;
+
+                    console.log("DataHoraEntradaString:", dataHoraEntradaString);
+
+                    const dataHoraEntrada = new Date(dataHoraEntradaString);
+                    console.log("DataHoraEntrada:", dataHoraEntrada);
+
                     const dataHoraSaida = new Date(); // Data e hora atuais
-                    const tempoEstacionamentoEmMilissegundos = dataHoraSaida - dataHoraEntrada; // Calcule a diferença de tempo em milissegundos
-                    const tempoEstacionamentoEmMinutos = Math.ceil(tempoEstacionamentoEmMilissegundos / (1000 * 60)); // Converta para minutos e arredonde para cima
+                    console.log("DataHoraSaida:", dataHoraSaida);
+
+                    // Calcular a diferença de tempo em milissegundos
+                    const tempoEstacionamentoEmMilissegundos = dataHoraSaida - dataHoraEntrada;
+                    const tempoEstacionamentoEmMinutos = Math.ceil(tempoEstacionamentoEmMilissegundos / (1000 * 60)); // Converter para minutos e arredondar para cima
+
+                    console.log("TempoEstacionamentoEmMinutos:", tempoEstacionamentoEmMinutos);
 
                     const configuracoesRef = doc(db, "configuracoes", "custoPorMinuto");
                     const configuracoesSnapshot = await getDoc(configuracoesRef);
@@ -61,17 +79,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         console.log("Custo total:", custoTotal);
 
                         const mensagem = `
-                            <p>Placa: ${placa}</p>
-                            <p>Modelo: ${modelo}</p>
-                            <p>Nome: ${nome}</p>
-                            <p>Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
-                            <p>Custo por minuto: ${custoPorMinuto}</p>
-                            <p>Custo total: ${custoTotal} unidades monetárias</p>
+                            <p class="msgp">Placa: ${placa}</p>
+                            <p class="msgp">Nome: ${nome}</p>
+                            <p class="msgp">Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
+                            <p class="msgp">Custo por minuto: R$ ${custoPorMinuto}</p>
+                            <p class="msgp">Custo total: R$ ${custoTotal.toFixed(2)}</p>
+                            <button id="pagar">Pagar Agora</button>
                         `;
-                        document.getElementById("popup-message").innerHTML = mensagem;
+                        document.getElementById("popup-ticket").innerHTML = mensagem;
                         document.getElementById("popup").style.display = "block"; // Exibe o popup
                     } else {
-                        console.log("Documento 'custporminuto' não encontrado.");
+                        console.log("Documento 'custoPorMinuto' não encontrado.");
                     }
                 } else {
                     console.log("Documento do veículo não encontrado.");
