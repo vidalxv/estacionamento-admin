@@ -51,7 +51,7 @@ async function adicionarVeiculo() {
         const ddi = "55"; // Código do Brasil
         const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
-        
+
 
         const xhr = new XMLHttpRequest();
         const url = 'https://wpp-ufd0.onrender.com/client/sendMessage/estacionamento';
