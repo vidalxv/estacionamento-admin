@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         // Adiciona um evento de clique ao botão "Pagar Agora"
                         document.getElementById("pagar").addEventListener("click", async () => {
                             try {
-                                const custoTotal = 100; // Apenas para fins de exemplo
 
                                 const xhr = new XMLHttpRequest();
                                 xhr.open('POST', 'https://mercadopago-n5po.onrender.com/payments');

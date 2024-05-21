@@ -586,3 +586,21 @@ nav .menu-items {
     color: #ffffff;
     border-radius: 10px;
 }
+
+input[type="date"]{
+    margin-top: 20px;
+    background-color: #0080ff;
+    padding: 10px;
+    font-family: "Roboto Mono",monospace;
+    color: #ffffff;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+::-webkit-calendar-picker-indicator{
+    background-color: #ffffff;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+}

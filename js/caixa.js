@@ -1,45 +1,72 @@
 import { db } from "./firebase.js";
-import { collection, doc, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
+
+const veiculosRef = collection(db, "caixa");
+
+async function carregarClientes() {
+    try {
+        const querySnapshot = await getDocs(veiculosRef);
+        const clientes = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            data.id = doc.id; // Armazenando o ID do documento, se necessário
+            clientes.push(data);
+        });
+        console.log("Clientes carregados:", clientes); // Log para depuração
+        return clientes;
+    } catch (error) {
+        console.log("Erro ao carregar clientes:", error);
+        return [];
+    }
+}
+
+function exibirCaixa(clientes) {
+    const tbody = document.getElementById("tabelaCaixa").getElementsByTagName("tbody")[0];
+    tbody.innerHTML = "";
+    clientes.forEach((data) => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+                    <td>${data.data}</td>
+                    <td>${data.placa}</td>
+                    <td>${data.modelo}</td>
+                    <td>${data.contato}</td>
+                    <td>${data.nome}</td>
+                `;
+        tbody.appendChild(newRow);
+    });
+}
+
+function filtrarPorData(registrosCaixa, dataSelecionada) {
+    // Converter a data selecionada para o formato dd/mm/yyyy
+    const [ano, mes, dia] = dataSelecionada.split("-");
+    const dataFormatada = `${dia}/${mes}/${ano}`;
+
+    console.log("Data selecionada:", dataSelecionada); // Log para depuração
+    console.log("Data formatada:", dataFormatada); // Log para depuração
+
+    // Filtrar os registros com base na data formatada
+    const registrosFiltrados = registrosCaixa.filter(registro => {
+        // Converter a data do registro para o mesmo formato
+        const registroData = registro.data; // Supondo que a data já esteja no formato dd/mm/yyyy
+
+        // Verificar se a data do registro corresponde à data selecionada
+        return registroData === dataFormatada;
+    });
+
+    console.log("Registros filtrados:", registrosFiltrados); // Log para depuração
+
+    // Exibir os registros filtrados na tabela
+    exibirCaixa(registrosFiltrados);
+}
+
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const tabelaCaixa = document.getElementById("tabelaCaixa");
-    const tbody = tabelaCaixa.querySelector("tbody");
+    const clientes = await carregarClientes();
+    exibirCaixa(clientes);
 
-    // Função para buscar dados do banco de dados Firestore
-    async function buscarDadosCaixa() {
-        try {
-            // Fazer a consulta à coleção "caixa" no Firestore
-            const querySnapshot = await getDocs(collection(db, "caixa"));
-
-            // Limpar os dados anteriores da tabela
-            tbody.innerHTML = "";
-
-            // Preencher a tabela com os novos dados
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${data.data}</td>
-                    <td>${data.tempo_estacionamento_minutos}</td>
-                    <td>${data.placa}</td>
-                    <td>${data.modelo}</td>
-                    <td>${data.custo_total}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        } catch (error) {
-            console.error("Erro ao buscar dados do caixa:", error);
-        }
-    }
-
-    // Chamar a função para buscar e exibir os dados do caixa quando a página carrega
-    await buscarDadosCaixa();
-
-    // Evento de mudança do filtro de data
-    document.getElementById("filterDate").addEventListener("change", async () => {
-        // Aqui você pode adicionar a lógica para filtrar os dados por data
-        // Por exemplo, chamar a função buscarDadosCaixa() novamente com o parâmetro de data selecionado
-        await buscarDadosCaixa();
+    document.getElementById("filterData").addEventListener("change", (event) => {
+        const dataSelecionada = event.target.value;
+        filtrarPorData(clientes, dataSelecionada);
     });
 });
