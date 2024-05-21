@@ -51,21 +51,34 @@ async function adicionarVeiculo() {
         const ddi = "55"; // Código do Brasil
         const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
+        
+
+        const xhr = new XMLHttpRequest();
+        const url = 'https://wpp-ufd0.onrender.com/client/sendMessage/estacionamento';
+        const apiKey = 'daniel';
         const messageBody = {
             chatId: `55${ddd}${numero}@c.us`,
             contentType: "string",
             content: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
         };
 
-        const response = await fetch('http://localhost:3000/client/sendMessage/estacionamento', {
-            method: 'POST',
-            headers: {
-                'accept': '*/*',
-                'x-api-key': 'daniel',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(messageBody)
-        });
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('accept', '*/*');
+        xhr.setRequestHeader('x-api-key', apiKey);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log(xhr.responseText); // Aqui você pode lidar com a resposta da requisição
+                } else {
+                    console.error('Erro ao fazer a requisição:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify(messageBody));
+
 
         if (!response.ok) {
             throw new Error('Erro ao enviar mensagem: ' + response.statusText);

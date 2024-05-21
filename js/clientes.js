@@ -1,26 +1,56 @@
 import { db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
 
-const veiculosRef = collection(db, "veiculos");
+        const veiculosRef = collection(db, "veiculos");
 
-function carregarClientes() {
-    getDocs(veiculosRef).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const newRow = document.createElement("tr");
-            newRow.innerHTML = `
-                <td>${data.data}</td>
-                <td>${data.hora}</td>
-                <td>${data.placa}</td>
-                <td>${data.modelo}</td>
-                <td>${data.contato}</td>
-                <td>${data.nome}</td>
-            `;
-            document.getElementById("tabelaClientes").getElementsByTagName("tbody")[0].appendChild(newRow);
+        async function carregarClientes() {
+            try {
+                const querySnapshot = await getDocs(veiculosRef);
+                const clientes = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    data.id = doc.id; // Armazenando o ID do documento, se necessário
+                    clientes.push(data);
+                });
+                return clientes;
+            } catch (error) {
+                console.log("Erro ao carregar clientes:", error);
+                return [];
+            }
+        }
+
+        function exibirClientes(clientes) {
+            const tbody = document.getElementById("tabelaClientes").getElementsByTagName("tbody")[0];
+            tbody.innerHTML = "";
+            clientes.forEach((data) => {
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td>${data.data}</td>
+                    <td>${data.hora}</td>
+                    <td>${data.placa}</td>
+                    <td>${data.modelo}</td>
+                    <td>${data.contato}</td>
+                    <td>${data.nome}</td>
+                `;
+                tbody.appendChild(newRow);
+            });
+        }
+
+        function filtrarPorData(clientes, dataSelecionada) {
+            // Converter a data selecionada para o formato dd-mm-yyyy
+            const [ano, mes, dia] = dataSelecionada.split("-");
+            const dataFormatada = `${dia}-${mes}-${ano}`;
+
+            const clientesFiltrados = clientes.filter(cliente => cliente.data === dataFormatada);
+            exibirClientes(clientesFiltrados);
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const clientes = await carregarClientes();
+            exibirClientes(clientes);
+
+            document.getElementById("filterDate").addEventListener("change", (event) => {
+                const dataSelecionada = event.target.value;
+                filtrarPorData(clientes, dataSelecionada);
+            });
         });
-    }).catch((error) => {
-        console.log("Erro ao carregar clientes:", error);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", carregarClientes);

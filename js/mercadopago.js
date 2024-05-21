@@ -1,57 +1,29 @@
-// Import node-fetch
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { MercadoPagoConfig, Payment } = require('mercadopago');
 
-// Definir o access token
-const accessToken = 'TEST-3711647004423148-051914-67cf424b6a3e5a4fe69ef19debcf169a-1265716188';
+const client = new MercadoPagoConfig({ accessToken: 'TEST-3711647004423148-051914-67cf424b6a3e5a4fe69ef19debcf169a-1265716188', options: { timeout: 5000, idempotencyKey: 'd' } });
 
-// Definir o endpoint
-const userId = 1265716188;
-const storeId = 61835222;
-const posId = 'ABCCAIXA'; // Substitua pelo seu POS ID
-const endpoint = `https://api.mercadopago.com/instore/qr/seller/${userId}/stores/${storeId}/pos/${posId}/orders`;
+const payment = new Payment(client);
+const createPayment = async () => {
+    try {
+        const body = {
+            transaction_amount: 1.20,
+            description: 'Estacionamento AutoSavvy',
+            payment_method_id: 'pix',
+            payer: {
+                email: 'email@cliente.com'
+            },
+        };
 
-// Construir o payload do pedido
-const payload = {
-    items: [
-        {
-            title: 'Produto 1',
-            quantity: 1,
-            unit_price: 10.00
-        },
-        {
-            title: 'Produto 2',
-            quantity: 2,
-            unit_price: 20.00
-        }
-    ],
-    total_amount: 50.00,
-};
+        const requestOptions = {
+            idempotencyKey: 'd',
+        };
 
-// Fazer a requisição para criar o pedido
-fetch(endpoint, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify(payload)
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const paymentResponse = await payment.create({ body, requestOptions });
+        console.log(paymentResponse);
+        return paymentResponse;
+    } catch (error) {
+        console.error(error);
     }
-    return response.json();
-})
-.then(data => {
-    console.log('Pedido criado:', data);
-})
-.catch(error => {
-    console.error('Erro ao criar o pedido:', error);
-});
+}; 
 
-console.log('Endpoint:', endpoint);
-console.log('Headers:', {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${accessToken}`
-});
-console.log('Payload:', payload);
+createPayment();

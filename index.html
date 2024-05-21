@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="shortcut icon" type="imagex/ico" href="/assets/logo-ico.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .hidden {
             display: none;
         }
 
         .nav-link.active {
-            color:  #007bff;
+            color: #007bff;
         }
     </style>
 </head>
@@ -63,6 +64,13 @@
                         <span class="link-name">Custo Minuto</span>
                     </a>
                 </li>
+                <br>
+                <li>
+                    <a href="#" class="nav-link" data-target="caixa-section">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="link-name">Caixa</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -76,6 +84,11 @@
         <div id="popup-message"></div>
     </section>
     <section id="pagamento-section" class="pagamento hidden">
+        <div style="display: flex; justify-content: center;">
+            <input type="text" id="search-input" placeholder="Digite a placa do veículo">
+        </div>
+        
+        <div id="search-results"></div>
         <div class="content-pagamentos">
             <div class="info-pay" id="info-pay">
             </div>
@@ -91,7 +104,7 @@
         </div>
     </section>
     <section id="vagas-section" class="vagas hidden">
-        <h1 style="text-align: center;">ÁREA A</h1>
+        <h1 style="text-align: center; font-size: 24px;">ÁREA A</h1>
         <div class="container-vaga">
             <div class="vaga-a">
                 <button class="vaga" data-vaga="A1">
@@ -149,6 +162,8 @@
     <section id="clientes-section" class="clientes hidden">
         <div class="clientes-content">
             <h1>HISTORICO</h1>
+            <label for="filterDate">Filtrar por data:</label>
+            <input type="date" id="filterDate">
             <table id="tabelaClientes">
                 <thead>
                     <tr>
@@ -161,7 +176,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 </tbody>
             </table>
         </div>
@@ -176,6 +190,47 @@
             </button>
         </div>
     </section>
+    <section id="caixa-section" class="caixa hidden">
+        <div class="clientes-content">
+            <h1>CAIXA</h1>
+            <label for="filterDate">Filtrar por data:</label>
+            <input type="date" id="filterDate">
+            <table id="tabelaCaixa">
+                <thead>
+                    <tr>
+                        <th>DATA</th>
+                        <th>TEMPO ESTACIONADO</th>
+                        <th>PLACA</th>
+                        <th>MODELO</th>
+                        <th>VALOR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <h4 style="margin-top: 40px;">RECEITA DO DIA: R$</h4>
+        </div>
+    </section>
+    <script>
+        async function createPayment() {
+            try {
+                const response = await fetch('http://localhost:3000/payments', { method: 'POST' });
+                const data = await response.json();
+                console.log(data);
+
+                // Verifica se a resposta contém o ticket_url
+                if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.ticket_url) {
+                    // Redireciona para o URL do ticket
+                    window.location.href = data.point_of_interaction.transaction_data.ticket_url;
+                } else {
+                    alert('Não foi possível obter o URL do ticket.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Erro ao criar pagamento.');
+            }
+        }
+    </script>
     <script src="js/formater.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"></script>
@@ -184,6 +239,7 @@
     <script type="module" src="/js/clientes.js"></script>
     <script type="module" src="/js/custo.js"></script>
     <script type="module" src="/js/vagas.js"></script>
+    <script type="module" src="/js/caixa.js"></script>
     <script type="module" src="/js/ticket.js"></script>
     <script defer src="/js/sections.js"></script>
 </body>

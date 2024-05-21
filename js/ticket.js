@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-import { collection, doc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
+import { collection, doc, getDocs, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
 
 const veiculosRef = collection(db, "veiculos");
 
@@ -7,7 +7,7 @@ function carregarClientes() {
     getDocs(veiculosRef).then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            const newRow = document.createElement("div"); 
+            const newRow = document.createElement("div");
             newRow.classList.add("ticket");
             newRow.innerHTML = `
             <div class="ticket-header">Ticket do Estacionamento</div>
@@ -88,6 +88,48 @@ document.addEventListener("DOMContentLoaded", () => {
                         `;
                         document.getElementById("popup-ticket").innerHTML = mensagem;
                         document.getElementById("popup").style.display = "block"; // Exibe o popup
+
+                        // Adiciona um evento de clique ao botão "Pagar Agora"
+                        document.getElementById("pagar").addEventListener("click", async () => {
+                            try {
+                                const custoTotal = 100; // Apenas para fins de exemplo
+
+                                const xhr = new XMLHttpRequest();
+                                xhr.open('POST', 'https://mercadopago-n5po.onrender.com/payments');
+                                xhr.setRequestHeader('Content-Type', 'application/json');
+                                xhr.onload = function () {
+                                    if (xhr.status === 200) {
+                                        const data = JSON.parse(xhr.responseText);
+                                        console.log(data);
+                                        if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.ticket_url) {
+                                            // Redireciona para o URL do ticket
+                                            window.location.href = data.point_of_interaction.transaction_data.ticket_url;
+                                            const caixaRef = collection(db, "caixa");
+                                             addDoc(caixaRef, {
+                                                placa: placa,
+                                                nome: nome,
+                                                tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
+                                                custo_total: custoTotal,
+                                                data_hora_pagamento: new Date().toISOString()
+                                            });
+                                        } else {
+                                            alert('Não foi possível obter o URL do ticket.');
+                                        }
+                                    } else {
+                                        console.error(xhr.responseText);
+                                        alert('Erro ao criar pagamento.');
+                                    }
+                                };
+                                xhr.onerror = function () {
+                                    console.error(xhr.responseText);
+                                    alert('Erro ao criar pagamento.');
+                                };
+                                xhr.send(JSON.stringify({ transaction_amount: custoTotal }));
+                            } catch (error) {
+                                console.error(error);
+                                alert('Erro ao criar pagamento.');
+                            }
+                        });
                     } else {
                         console.log("Documento 'custoPorMinuto' não encontrado.");
                     }
@@ -111,11 +153,5 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.target == popup) {
             popup.style.display = "none";
         }
-    });
-
-    // Adiciona um evento de clique ao botão "Pagar Agora"
-    document.getElementById("pagar").addEventListener("click", () => {
-        // Redireciona o usuário para a página de pagamento
-        window.location.href = "pagina_de_pagamento.html"; // Substitua com a URL da sua página de pagamento
     });
 });
