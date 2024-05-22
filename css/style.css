@@ -461,6 +461,7 @@ nav .menu-items {
 }
 
 .nav-links li {
+    width: 100%;
     display: inline-block;
     margin-right: 20px;
 }
