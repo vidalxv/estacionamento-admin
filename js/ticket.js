@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         document.getElementById("pagar").addEventListener("click", async () => {
                             try {
                                 const xhr = new XMLHttpRequest();
-                                xhr.open('POST', 'http://localhost:3000/payments');
+                                xhr.open('POST', 'https://mercadopago-n5po.onrender.com/payments');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = function () {
                                     if (xhr.status === 200) {
