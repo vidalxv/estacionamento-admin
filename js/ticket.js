@@ -5,30 +5,68 @@ const veiculosRef = collection(db, "veiculos");
 
 function carregarClientes() {
     getDocs(veiculosRef).then((querySnapshot) => {
+        const tickets = [];
         querySnapshot.forEach((doc) => {
             const data = doc.data();
-            const newRow = document.createElement("div");
-            newRow.classList.add("ticket");
-            newRow.innerHTML = `
+            tickets.push({ id: doc.id, ...data });
+        });
+        displayTickets(tickets);
+    }).catch((error) => {
+        console.log("Erro ao carregar tickets:", error);
+    });
+}
+
+function displayTickets(tickets) {
+    const infoPayElement = document.getElementById("info-pay");
+    infoPayElement.innerHTML = '';
+
+    tickets.forEach(ticket => {
+        const newRow = document.createElement("div");
+        newRow.classList.add("ticket");
+        newRow.innerHTML = `
             <div class="ticket-header">Ticket do Estacionamento</div>
-            <p>Data: ${data.data}</p>
-            <p>Hora: ${data.hora}</p>
-            <p>Placa: ${data.placa}</p>
-            <p>Modelo: ${data.modelo}</p>
-            <p>Nome: ${data.nome}</p>
+            <p>Data: ${ticket.data}</p>
+            <p>Hora: ${ticket.hora}</p>
+            <p>Placa: ${ticket.placa}</p>
+            <p>Modelo: ${ticket.modelo}</p>
+            <p>Nome: ${ticket.nome}</p>
             <div class="ticket-footer">
-                <button class="add" data-id="${doc.id}"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
+                <button class="add" data-id="${ticket.id}"><i class="fa-solid fa-cart-shopping"></i> Finalizar</button>
             </div>
         `;
-            document.getElementById("info-pay").appendChild(newRow);
+        infoPayElement.appendChild(newRow);
+    });
+}
+
+function filterAndDisplayTickets(searchTerm) {
+    getDocs(veiculosRef).then((querySnapshot) => {
+        const tickets = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            tickets.push({ id: doc.id, ...data });
         });
+
+        const filteredTickets = tickets.filter(ticket =>
+            ticket.placa.toLowerCase().includes(searchTerm)
+        );
+
+        // Sort tickets based on the placa
+        filteredTickets.sort((a, b) => a.placa.localeCompare(b.placa));
+
+        // Display filtered and sorted tickets
+        displayTickets(filteredTickets);
     }).catch((error) => {
-        console.log("Erro ao carregar ticket:", error);
+        console.log("Erro ao carregar tickets:", error);
     });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     carregarClientes();
+
+    document.getElementById("search-input").addEventListener("input", function (event) {
+        const searchTerm = event.target.value.toLowerCase();
+        filterAndDisplayTickets(searchTerm);
+    });
 
     document.getElementById("info-pay").addEventListener("click", async (event) => {
         const target = event.target;
@@ -84,32 +122,48 @@ document.addEventListener("DOMContentLoaded", () => {
                             <p class="msgp">Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
                             <p class="msgp">Custo por minuto: R$ ${custoPorMinuto}</p>
                             <p class="msgp">Custo total: R$ ${custoTotal.toFixed(2)}</p>
-                            <button id="pagar">Pagar Agora</button>
+                            <button id="pagar">PAGAR COM PIX</button>
+                            <button id="pagarmanual">PAGAR MANUALMENTE</button>
                         `;
                         document.getElementById("popup-ticket").innerHTML = mensagem;
                         document.getElementById("popup").style.display = "block"; // Exibe o popup
 
+
+                        document.getElementById("pagarmanual").addEventListener("click", () => {
+                            document.getElementById("popup").style.display = "none";
+                            const caixaRef = collection(db, "caixa");
+                            addDoc(caixaRef, {
+                                placa: placa,
+                                nome: nome,
+                                tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
+                                custo_total: custoTotal,
+                                data: new Date().toLocaleDateString(),
+                                formpag: "MANUAL"
+                            });
+                        });
+
                         // Adiciona um evento de clique ao botão "Pagar Agora"
                         document.getElementById("pagar").addEventListener("click", async () => {
                             try {
-
                                 const xhr = new XMLHttpRequest();
-                                xhr.open('POST', 'https://mercadopago-n5po.onrender.com/payments');
+                                xhr.open('POST', 'http://localhost:3000/payments');
                                 xhr.setRequestHeader('Content-Type', 'application/json');
                                 xhr.onload = function () {
                                     if (xhr.status === 200) {
                                         const data = JSON.parse(xhr.responseText);
                                         console.log(data);
-                                        if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.ticket_url) {
-                                            // Redireciona para o URL do ticket
-                                            window.location.href = data.point_of_interaction.transaction_data.ticket_url;
+                                        if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.qr_code_base64) {
+                                            const qrCodeContainer = document.getElementById("popup")
+                                            const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+                                            qrCodeContainer.innerHTML = `<img src="data:image/png;base64,${qrCodeBase64}" alt="QR Code" width="300px"/>`;
                                             const caixaRef = collection(db, "caixa");
-                                             addDoc(caixaRef, {
+                                            addDoc(caixaRef, {
                                                 placa: placa,
                                                 nome: nome,
                                                 tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
                                                 custo_total: custoTotal,
-                                                data_hora_pagamento: new Date().toISOString()
+                                                data: new Date().toLocaleDateString(),
+                                                formpag: "PIX"
                                             });
                                         } else {
                                             alert('Não foi possível obter o URL do ticket.');

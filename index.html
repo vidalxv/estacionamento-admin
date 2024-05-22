@@ -24,7 +24,7 @@
     <nav>
         <div class="logo-name">
             <div class="logo-image">
-                <img id="logo" src="/assets/logo-black-white.png" alt="logo-top" width="50px" />
+                <img id="logo" src="/assets/logo-black-white.png" alt="logo-top" />
                 <span>AutoSavvy<br>Park</span>
             </div>
         </div>
@@ -87,7 +87,7 @@
         <div style="display: flex; justify-content: center;">
             <input type="text" id="search-input" placeholder="Digite a placa do veículo">
         </div>
-        
+
         <div id="search-results"></div>
         <div class="content-pagamentos">
             <div class="info-pay" id="info-pay">
@@ -194,43 +194,28 @@
         <div class="clientes-content">
             <h1>CAIXA</h1>
             <label for="filterDate">Filtrar por data:</label>
-            <input type="date" id="filterData">
+            <div class="datas">
+                <input type="date" id="dataInicio">
+                <input type="date" id="dataFim">
+            </div>
+            <button id="filterInterval" class="add" style="width: 30%;">Filtrar por Intervalo</button>
             <table id="tabelaCaixa">
                 <thead>
                     <tr>
                         <th>DATA</th>
                         <th>TEMPO ESTACIONADO</th>
                         <th>PLACA</th>
-                        <th>MODELO</th>
+                        <th>NOME</th>
                         <th>VALOR</th>
+                        <th>PAGAMENTO</th>
                     </tr>
                 </thead>
                 <tbody>
                 </tbody>
             </table>
-            <h4 style="margin-top: 40px;">RECEITA DO DIA: R$</h4>
+            <h4 style="margin-top: 40px;" id="totalCusto"></h4>
         </div>
     </section>
-    <script>
-        async function createPayment() {
-            try {
-                const response = await fetch('http://localhost:3000/payments', { method: 'POST' });
-                const data = await response.json();
-                console.log(data);
-
-                // Verifica se a resposta contém o ticket_url
-                if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.ticket_url) {
-                    // Redireciona para o URL do ticket
-                    window.location.href = data.point_of_interaction.transaction_data.ticket_url;
-                } else {
-                    alert('Não foi possível obter o URL do ticket.');
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Erro ao criar pagamento.');
-            }
-        }
-    </script>
     <script src="js/formater.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"></script>

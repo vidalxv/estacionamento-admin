@@ -54,7 +54,7 @@ async function adicionarVeiculo() {
 
 
         const xhr = new XMLHttpRequest();
-        const url = 'https://wpp-ufd0.onrender.com/client/sendMessage/estacionamento';
+        const url = 'https://1674-200-4-106-30.ngrok-free.app/client/sendMessage/estacionamento';
         const apiKey = 'daniel';
         const messageBody = {
             chatId: `55${ddd}${numero}@c.us`,

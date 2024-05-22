@@ -20,37 +20,60 @@ async function carregarClientes() {
     }
 }
 
-function exibirCaixa(clientes) {
+async function exibirCaixa(clientes) {
+    console.log("Exibindo caixa...");
+
     const tbody = document.getElementById("tabelaCaixa").getElementsByTagName("tbody")[0];
     tbody.innerHTML = "";
     clientes.forEach((data) => {
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
                     <td>${data.data}</td>
+                    <td>${data.tempo_estacionamento_minutos} MINUTOS</td>
                     <td>${data.placa}</td>
-                    <td>${data.modelo}</td>
-                    <td>${data.contato}</td>
                     <td>${data.nome}</td>
+                    <td>R$${data.custo_total}</td>
+                    <td>${data.formpag}</td>
                 `;
         tbody.appendChild(newRow);
     });
+
+    // Calcular e exibir a soma dos valores
+    const totalCusto = clientes.reduce((total, cliente) => total + parseFloat(cliente.custo_total), 0);
+    document.getElementById("totalCusto").innerText = `Total: R$${totalCusto.toFixed(2)}`;
+
+    console.log("Caixa exibido."); // Log para depuração
 }
 
-function filtrarPorData(registrosCaixa, dataSelecionada) {
-    // Converter a data selecionada para o formato dd/mm/yyyy
-    const [ano, mes, dia] = dataSelecionada.split("-");
-    const dataFormatada = `${dia}/${mes}/${ano}`;
+function filtrarPorIntervaloDeDatas(registrosCaixa, dataInicio, dataFim) {
+    console.log("Filtrando por intervalo de datas...");
+    console.log("Data de início:", dataInicio);
+    console.log("Data de fim:", dataFim);
+    console.log("Registros para filtrar:", registrosCaixa);
 
-    console.log("Data selecionada:", dataSelecionada); // Log para depuração
-    console.log("Data formatada:", dataFormatada); // Log para depuração
+    // Formatar as datas de início e fim para o formato "dd/mm/yyyy" se estiverem no formato "yyyy-mm-dd"
+    const dataInicioFormatada = dataInicio.includes('/') ? formatarData(dataInicio) : dataInicio;
+    const dataFimFormatada = dataFim.includes('/') ? formatarData(dataFim) : dataFim;
 
-    // Filtrar os registros com base na data formatada
+    console.log("Data de início formatada:", dataInicioFormatada);
+    console.log("Data de fim formatada:", dataFimFormatada);
+
+    // Filtrar os registros com base no intervalo de datas
     const registrosFiltrados = registrosCaixa.filter(registro => {
         // Converter a data do registro para o mesmo formato
-        const registroData = registro.data; // Supondo que a data já esteja no formato dd/mm/yyyy
+        const [diaRegistro, mesRegistro, anoRegistro] = registro.data.split(/[/-]/); // Permitir tanto "-" quanto "/"
+        const dataRegistroFormatada = `${anoRegistro}-${mesRegistro}-${diaRegistro}`;
+        console.log("Data do registro:", registro.data);
 
-        // Verificar se a data do registro corresponde à data selecionada
-        return registroData === dataFormatada;
+        // Criar objetos de data para facilitar a comparação
+        const dataRegistro = new Date(dataRegistroFormatada);
+        const dataInicioFiltro = new Date(dataInicioFormatada);
+        const dataFimFiltro = new Date(dataFimFormatada);
+
+        console.log("Data do registro formatada:", dataRegistro);
+
+        // Verificar se a data do registro está dentro do intervalo especificado
+        return dataRegistro >= dataInicioFiltro && dataRegistro <= dataFimFiltro;
     });
 
     console.log("Registros filtrados:", registrosFiltrados); // Log para depuração
@@ -60,13 +83,26 @@ function filtrarPorData(registrosCaixa, dataSelecionada) {
 }
 
 
+function formatarData(data) {
+    const [dia, mes, ano] = data.split("/");
+    // Construir a data no formato esperado pelo objeto Date (ano, mês - 1, dia)
+    return new Date(ano, mes - 1, dia);
+}
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     const clientes = await carregarClientes();
     exibirCaixa(clientes);
 
-    document.getElementById("filterData").addEventListener("change", (event) => {
-        const dataSelecionada = event.target.value;
-        filtrarPorData(clientes, dataSelecionada);
+    document.getElementById("filterInterval").addEventListener("click", () => {
+        const dataInicio = document.getElementById("dataInicio").value;
+        const dataFim = document.getElementById("dataFim").value;
+
+        console.log("Data de início:", dataInicio);
+        console.log("Data de fim:", dataFim);
+
+        filtrarPorIntervaloDeDatas(clientes, dataInicio, dataFim);
     });
 });
+
+console.log("Clientes para exibir na tabela:", clientes);
