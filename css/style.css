@@ -13,6 +13,9 @@ body {
     justify-content: flex-end;
 }
 
+h1 {
+    font-size: 26px;
+}
 main {
     width: 500px;
     height: 600px;

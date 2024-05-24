@@ -60,6 +60,10 @@ function filtrarPorIntervaloDeDatas(registrosCaixa, dataInicio, dataFim) {
 
     // Filtrar os registros com base no intervalo de datas
     const registrosFiltrados = registrosCaixa.filter(registro => {
+        if (!registro.data) {
+            console.log("Registro sem data:", registro);
+            return false; // Ignorar registros sem data
+        }
         // Converter a data do registro para o mesmo formato
         const [diaRegistro, mesRegistro, anoRegistro] = registro.data.split(/[/-]/); // Permitir tanto "-" quanto "/"
         const dataRegistroFormatada = `${anoRegistro}-${mesRegistro}-${diaRegistro}`;
@@ -82,13 +86,11 @@ function filtrarPorIntervaloDeDatas(registrosCaixa, dataInicio, dataFim) {
     exibirCaixa(registrosFiltrados);
 }
 
-
 function formatarData(data) {
     const [dia, mes, ano] = data.split("/");
     // Construir a data no formato esperado pelo objeto Date (ano, mês - 1, dia)
     return new Date(ano, mes - 1, dia);
 }
-
 
 document.addEventListener("DOMContentLoaded", async () => {
     const clientes = await carregarClientes();

@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-import { collection, doc, getDocs, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
+import { collection, doc, getDocs, getDoc, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js";
 
 const veiculosRef = collection(db, "veiculos");
 
@@ -116,73 +116,94 @@ document.addEventListener("DOMContentLoaded", () => {
                         const custoTotal = custoPorMinuto * tempoEstacionamentoEmMinutos;
                         console.log("Custo total:", custoTotal);
 
-                        const mensagem = `
-                            <p class="msgp">Placa: ${placa}</p>
-                            <p class="msgp">Nome: ${nome}</p>
-                            <p class="msgp">Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
-                            <p class="msgp">Custo por minuto: R$ ${custoPorMinuto}</p>
-                            <p class="msgp">Custo total: R$ ${custoTotal.toFixed(2)}</p>
-                            <button id="pagar">PAGAR COM PIX</button>
-                            <button id="pagarmanual">PAGAR MANUALMENTE</button>
-                        `;
-                        document.getElementById("popup-ticket").innerHTML = mensagem;
-                        document.getElementById("popup").style.display = "block"; // Exibe o popup
+                        const popupTicketElement = document.getElementById("popup-ticket");
+                        if (popupTicketElement) {
+                            const mensagem = `
+                                <p class="msgp">Placa: ${placa}</p>
+                                <p class="msgp">Nome: ${nome}</p>
+                                <p class="msgp">Tempo de estacionamento: ${tempoEstacionamentoEmMinutos} minutos</p>
+                                <p class="msgp">Custo por minuto: R$ ${custoPorMinuto}</p>
+                                <p class="msgp">Custo total: R$ ${custoTotal.toFixed(2)}</p>
+                                <button id="pagar">PAGAR COM PIX</button>
+                                <button id="pagarmanual">PAGAR MANUALMENTE</button>
+                            `;
+                            popupTicketElement.innerHTML = mensagem;
+                            document.getElementById("popup").style.display = "block"; // Exibe o popup
 
+                            document.getElementById("pagarmanual").addEventListener("click", async () => {
+                                try {
+                                    document.getElementById("popup").style.display = "none";
+                                    const caixaRef = collection(db, "caixa");
 
-                        document.getElementById("pagarmanual").addEventListener("click", () => {
-                            document.getElementById("popup").style.display = "none";
-                            const caixaRef = collection(db, "caixa");
-                            addDoc(caixaRef, {
-                                placa: placa,
-                                nome: nome,
-                                tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
-                                custo_total: custoTotal,
-                                data: new Date().toLocaleDateString(),
-                                formpag: "MANUAL"
+                                    // Add the record to the "caixa" collection
+                                    await addDoc(caixaRef, {
+                                        placa: placa,
+                                        nome: nome,
+                                        tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
+                                        custo_total: custoTotal,
+                                        data: new Date().toLocaleDateString(),
+                                        formpag: "MANUAL"
+                                    });
+
+                                    // Remove the record from the "veiculos" collection
+                                    const veiculoDocRef = doc(db, "veiculos", docId);
+                                    await deleteDoc(veiculoDocRef);
+
+                                    console.log("Documento removido da coleção 'veiculos'.");
+                                } catch (error) {
+                                    console.error("Erro ao remover o documento da coleção 'veiculos':", error);
+                                }
                             });
-                        });
 
-                        // Adiciona um evento de clique ao botão "Pagar Agora"
-                        document.getElementById("pagar").addEventListener("click", async () => {
-                            try {
-                                const xhr = new XMLHttpRequest();
-                                xhr.open('POST', 'http://localhost:3000/payments');
-                                xhr.setRequestHeader('Content-Type', 'application/json');
-                                xhr.onload = function () {
-                                    if (xhr.status === 200) {
-                                        const data = JSON.parse(xhr.responseText);
-                                        console.log(data);
-                                        if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.qr_code_base64) {
-                                            const qrCodeContainer = document.getElementById("popup")
-                                            const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
-                                            qrCodeContainer.innerHTML = `<img src="data:image/png;base64,${qrCodeBase64}" alt="QR Code" width="300px"/>`;
-                                            const caixaRef = collection(db, "caixa");
-                                            addDoc(caixaRef, {
-                                                placa: placa,
-                                                nome: nome,
-                                                tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
-                                                custo_total: custoTotal,
-                                                data: new Date().toLocaleDateString(),
-                                                formpag: "PIX"
-                                            });
+
+                            // Adiciona um evento de clique ao botão "Pagar Agora"
+                            document.getElementById("pagar").addEventListener("click", async () => {
+                                try {
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open('POST', 'https://mercadopago-n5po.onrender.com/payments');
+                                    xhr.setRequestHeader('Content-Type', 'application/json');
+
+                                    const custoTotalInt = Math.round(custoTotal * 100);
+                                    xhr.onload = function () {
+                                        if (xhr.status === 200) {
+                                            const data = JSON.parse(xhr.responseText);
+                                            console.log(data);
+                                            if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.qr_code_base64) {
+                                                const qrCodeContainer = document.getElementById("popup-ticket");
+                                                const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+                                                qrCodeContainer.innerHTML = `<img src="data:image/png;base64,${qrCodeBase64}" alt="QR Code" width="100%"/><div style="display: flex;
+                                                justify-content: flex-end;
+                                                align-items: flex-end;"><p style="width: 100%;">Aguardando Pagamento...</p><img src="https://www.previcaceres.com.br/aposentadoria/images/loading_verde.gif" width="50px" style="position: absolute;"></img></div>`;
+                                                const caixaRef = collection(db, "caixa");
+                                                addDoc(caixaRef, {
+                                                    placa: placa,
+                                                    nome: nome,
+                                                    tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
+                                                    custo_total: custoTotalInt,
+                                                    data: new Date().toLocaleDateString(),
+                                                    formpag: "PIX"
+                                                });
+                                            } else {
+                                                alert('Não foi possível obter o URL do ticket.');
+                                            }
                                         } else {
-                                            alert('Não foi possível obter o URL do ticket.');
+                                            console.error(xhr.responseText);
+                                            alert('Erro ao criar pagamento.');
                                         }
-                                    } else {
+                                    };
+                                    xhr.onerror = function () {
                                         console.error(xhr.responseText);
                                         alert('Erro ao criar pagamento.');
-                                    }
-                                };
-                                xhr.onerror = function () {
-                                    console.error(xhr.responseText);
+                                    };
+                                    xhr.send(JSON.stringify({ transaction_amount: custoTotalInt }));
+                                } catch (error) {
+                                    console.error(error);
                                     alert('Erro ao criar pagamento.');
-                                };
-                                xhr.send(JSON.stringify({ transaction_amount: custoTotal }));
-                            } catch (error) {
-                                console.error(error);
-                                alert('Erro ao criar pagamento.');
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            console.log("Elemento 'popup-ticket' não encontrado.");
+                        }
                     } else {
                         console.log("Documento 'custoPorMinuto' não encontrado.");
                     }
