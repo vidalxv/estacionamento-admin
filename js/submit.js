@@ -51,10 +51,8 @@ async function adicionarVeiculo() {
         const ddi = "55"; // Código do Brasil
         const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
-
-
         const xhr = new XMLHttpRequest();
-        const url = 'https://1674-200-4-106-30.ngrok-free.app/client/sendMessage/estacionamento';
+        const url = 'https://ac9e-3-16-31-121.ngrok-free.app/client/sendMessage/estacionamento';
         const apiKey = 'daniel';
         const messageBody = {
             chatId: `55${ddd}${numero}@c.us`,
@@ -78,7 +76,6 @@ async function adicionarVeiculo() {
         };
 
         xhr.send(JSON.stringify(messageBody));
-
 
         if (!response.ok) {
             throw new Error('Erro ao enviar mensagem: ' + response.statusText);
