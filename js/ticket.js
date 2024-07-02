@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             document.getElementById("pagar").addEventListener("click", async () => {
                                 try {
                                     const xhr = new XMLHttpRequest();
-                                    xhr.open('POST', 'https://pix-efipay.onrender.com/criar-pix');
+                                    xhr.open('POST', 'https://pix-efipay.vercel.app/criar-pix');
                                     xhr.setRequestHeader('Content-Type', 'application/json');
 
                                     xhr.onload = async function () {
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function checkPaymentStatus(paymentId) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `https://pix-efipay.onrender.com/${paymentId}`);
+        xhr.open('GET', `https://pix-efipay.vercel.app/${paymentId}`);
         xhr.setRequestHeader('accept', '*/*');
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
