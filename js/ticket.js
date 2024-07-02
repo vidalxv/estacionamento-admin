@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         console.log("Custo por minuto:", custoPorMinuto);
 
                         const custoTotal = custoPorMinuto * tempoEstacionamentoEmMinutos;
-                        const custoTotalInt = Number(custoTotal.toFixed(2));
+                        const custoTotalStr = String(custoTotal.toFixed(2));
                         console.log("Custo total:", custoTotal);
 
                         const popupTicketElement = document.getElementById("popup-ticket");
@@ -159,24 +159,25 @@ document.addEventListener("DOMContentLoaded", () => {
                             document.getElementById("pagar").addEventListener("click", async () => {
                                 try {
                                     const xhr = new XMLHttpRequest();
-                                    xhr.open('POST', 'https://mercadopago-roan.vercel.app/payments');
+                                    xhr.open('POST', 'https://pix-efipay.onrender.com/criar-pix');
                                     xhr.setRequestHeader('Content-Type', 'application/json');
 
                                     xhr.onload = async function () {
                                         if (xhr.status === 200) {
                                             const data = JSON.parse(xhr.responseText);
-                                            if (data && data.point_of_interaction && data.point_of_interaction.transaction_data && data.point_of_interaction.transaction_data.qr_code_base64 && data.id) {
+                                            console.log("ok")
+                                            if (data && data.qrCodeResponse.imagemQrcode) {
                                                 const qrCodeContainer = document.getElementById("popup-ticket");
-                                                const idPagamento = data.id;
-                                                const qrCodeBase64 = data.point_of_interaction.transaction_data.qr_code_base64;
+                                                const idPagamento = data.txid;
+                                                const qrCodeBase64 = data.qrCodeResponse.imagemQrcode;
                                                 qrCodeContainer.innerHTML = `
-                                                    <img src="data:image/png;base64,${qrCodeBase64}" alt="QR Code" width="100%"/>
+                                                    <img src="${qrCodeBase64}" alt="QR Code" width="100%"/>
                                                     <div style="display: flex; justify-content: flex-end; align-items: flex-end;">
                                                         <p style="width: 100%;">Aguardando Pagamento...</p>
                                                         <img src="https://www.previcaceres.com.br/aposentadoria/images/loading_verde.gif" width="50px" style="position: absolute;"></img>
                                                     </div>`;
 
-                                                await checkPaymentStatusPeriodically(idPagamento, placa, nome, tempoEstacionamentoEmMinutos, custoTotalInt, docId);
+                                                await checkPaymentStatusPeriodically(idPagamento, placa, nome, tempoEstacionamentoEmMinutos, custoTotalStr, docId);
                                             } else {
                                                 alert('Não foi possível obter o URL do ticket.');
                                             }
@@ -191,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         alert('Erro ao criar pagamento.');
                                     };
 
-                                    xhr.send(JSON.stringify({ transaction_amount: custoTotalInt }));
+                                    xhr.send(JSON.stringify({ transaction_amount: custoTotalStr }));
                                 } catch (error) {
                                     console.error(error);
                                     alert('Erro ao criar pagamento.');
@@ -229,14 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
 async function checkPaymentStatus(paymentId) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `https://api.mercadopago.com/v1/payments/${paymentId}`);
+        xhr.open('GET', `https://pix-efipay.onrender.com/${paymentId}`);
         xhr.setRequestHeader('accept', '*/*');
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.setRequestHeader('Authorization', 'Bearer APP_USR-3711647004423148-051914-487239491cac569bacf34fbbde8783e1-1265716188');
         xhr.onload = function () {
             if (xhr.status === 200) {
                 const paymentInfo = JSON.parse(xhr.responseText);
-                resolve(paymentInfo.status);
+                resolve(paymentInfo.resposta.status);
             } else {
                 reject(new Error('Erro ao verificar pagamento. Status: ' + xhr.status));
             }
@@ -254,7 +254,7 @@ async function checkPaymentStatusPeriodically(paymentId, placa, nome, tempoEstac
         try {
             const status = await checkPaymentStatus(paymentId);
             console.log("Status do pagamento:", status);
-            if (status === "approved") {
+            if (status === "CONCLUIDA") {
                 clearInterval(interval);
 
                 const pagamento = document.getElementById("popup-ticket");

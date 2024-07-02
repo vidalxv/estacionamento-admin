@@ -106,5 +106,3 @@ document.addEventListener("DOMContentLoaded", async () => {
         filtrarPorIntervaloDeDatas(clientes, dataInicio, dataFim);
     });
 });
-
-console.log("Clientes para exibir na tabela:", clientes);
