@@ -52,12 +52,12 @@ async function adicionarVeiculo() {
         const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
         const xhr = new XMLHttpRequest();
-        const url = 'https://ac9e-3-16-31-121.ngrok-free.app/client/sendMessage/estacionamento';
+        const url = 'https://fd09-131-0-245-234.ngrok-free.app/enviar-mensagem';
         const apiKey = 'daniel';
         const messageBody = {
-            chatId: `55${ddd}${numero}@c.us`,
+            to: `55${ddd}${numero}`,
             contentType: "string",
-            content: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
+            message: `*TICKET EMITIDO*    Placa: ${placa}, Modelo: ${modelo}, Data: ${dataFormatada}, Hora: ${horaFormatada}`
         };
 
         xhr.open('POST', url, true);
