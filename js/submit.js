@@ -52,7 +52,7 @@ async function adicionarVeiculo() {
         const telefoneFormatado = `${ddi}${ddd}${numero}`;
 
         const xhr = new XMLHttpRequest();
-        const url = 'https://8ce9-179-48-182-22.ngrok-free.app/enviar-mensagem';
+        const url = 'https://f959-179-48-182-22.ngrok-free.app/enviar-mensagem';
         const apiKey = 'daniel';
         const messageBody = {
             to: `55${ddd}${numero}`,
