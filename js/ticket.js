@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         placa: placa,
                                         nome: nome,
                                         tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
-                                        custo_total: custoTotalInt,
+                                        custo_total: custoTotalStr,
                                         data: new Date().toLocaleDateString(),
                                         formpag: "MANUAL"
                                     });
@@ -265,7 +265,7 @@ async function checkPaymentStatusPeriodically(paymentId, placa, nome, tempoEstac
                     placa: placa,
                     nome: nome,
                     tempo_estacionamento_minutos: tempoEstacionamentoEmMinutos,
-                    custo_total: custoTotalInt,
+                    custo_total: custoTotalStr,
                     data: new Date().toLocaleDateString(),
                     formpag: "PIX"
                 });
